@@ -7,8 +7,7 @@ from PySide6.QtWidgets import (
     QPushButton, QListWidget, QFileDialog, QLineEdit, QLabel, QSlider, QMessageBox, QListWidgetItem
 )
 from PySide6.QtCore import Qt
-from modulos.player import MusicPlayer
-from downloader.py import download_audio  # ojo: nombre correcto del archivo: downloader.py
+from music_player import MusicPlayer
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -106,16 +105,11 @@ class MainWindow(QMainWindow):
         self.btn_download.setEnabled(False)
         self.btn_download.setText("Descargando…")
         try:
-            path = download_audio(url, output_dir="downloads")
-            if path and os.path.exists(path):
-                # Añadir a la playlist
-                self.player.add([path])
-                item = QListWidgetItem(os.path.basename(path))
-                item.setData(Qt.UserRole, path)
-                self.list_widget.addItem(item)
-                QMessageBox.information(self, "Listo", "Descarga completada.")
-            else:
-                QMessageBox.critical(self, "Error", "No se pudo completar la descarga.")
+            # For now, show a message that this feature requires the API server
+            QMessageBox.information(self, "Información", 
+                "Para descargar desde URL, usa la interfaz web React.\n"
+                "Ejecuta 'python api_server.py' y abre http://localhost:3000")
+            return
         finally:
             self.btn_download.setEnabled(True)
             self.btn_download.setText("⬇️ Descargar MP3")
